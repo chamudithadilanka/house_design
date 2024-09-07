@@ -13,7 +13,7 @@ export const SingUp = async (req, res,next) => {
         await newUser.save()
         res.status(201).json('User created successfully!!');
     }catch (error){
-        next(error);
+        next(error);    
     };    
     
     
