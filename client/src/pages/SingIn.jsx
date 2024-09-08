@@ -1,23 +1,25 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { SingInStart, SingInSuccess, SingInFailure } from '../redux/user/userSlice';
 
 export default function SingIn() {
   const [formData, setFormData] = useState({});
-  const [errors, setErrors] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleChange = (e) => {
-    setFormData({ 
-      ...formData, 
-      [e.target.id]: e.target.value, 
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
+      dispatch(SingInStart());
       const res = await fetch('/api/auth/SingIn', {
         method: 'POST',
         headers: {
@@ -29,18 +31,15 @@ export default function SingIn() {
       const data = await res.json();
       console.log(data);
 
-      if (data?.success === false) {
-        setLoading(false);
-        setErrors(data.message);
+      if (data.success === false) {
+        dispatch(SingInFailure(data.message));
         return;
       }
 
-      setLoading(false);
-      setErrors(null);
+      dispatch(SingInSuccess(data));
       navigate('/');
     } catch (error) {
-      setLoading(false);
-      setErrors(error.message);
+      dispatch(SingInFailure(error.message));
     }
   };
 
@@ -50,7 +49,6 @@ export default function SingIn() {
         <h1 className="text-4xl text-center font-bold text-gray-800 mb-8">Sign In</h1>
 
         <form className="flex flex-col gap-7" onSubmit={handleSubmit}>
-          
           <input
             type="email"
             placeholder="Email"
@@ -74,13 +72,13 @@ export default function SingIn() {
         </form>
 
         <div className="flex justify-center items-center gap-2 mt-5">
-          <p className="text-gray-600">Dont't have an account?</p>
-          <Link to="/SingUp">
+          <p className="text-gray-600">Don't have an account?</p>
+          <Link to="/SignUp">
             <span className="text-indigo-600 font-medium hover:underline">Sign Up</span>
           </Link>
         </div>
 
-        {errors && <p className="text-red-500">{errors}</p>}
+        {error && <p className="text-red-500">{error}</p>}
       </div>
     </div>
   );
