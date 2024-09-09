@@ -1,36 +1,32 @@
-<<<<<<< HEAD
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import userReducer from './user/userSlice';
-import {persistReducer} from 'redux-persist';
-import { version } from 'mongoose';
+import { persistReducer } from 'redux-persist';
 import persistStore from 'redux-persist/es/persistStore';
 import storage from 'redux-persist/lib/storage';
 
-const rootReducer = combineReducers({user: userReducer})
+// Combine the reducers (more can be added here)
+const rootReducer = combineReducers({
+  user: userReducer,
+});
 
+// Persist configuration for Redux
 const persistConfig = {
-    key: 'root',
-    storage,
-    version:1,
-    
+  key: 'root',
+  storage,
+  version: 1,
 };
 
-const persistedReducer = persistReducer(persistConfig,rootReducer);
+// Persisted reducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
+// Configure the Redux store
 export const store = configureStore({
   reducer: persistedReducer,
-=======
-import { configureStore } from '@reduxjs/toolkit'
-import userReducer from './user/userSlice';
-
-export const store = configureStore({
-  reducer: { user: userReducer},
->>>>>>> 9763cf008be67dbb49b2473639407388ecabb54f
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-    serializableCheck: false,
-  }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
-<<<<<<< HEAD
+
+// Create the persistor to persist the store
 export const persistor = persistStore(store);
-=======
->>>>>>> 9763cf008be67dbb49b2473639407388ecabb54f
