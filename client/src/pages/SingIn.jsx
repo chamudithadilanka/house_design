@@ -73,7 +73,7 @@ export default function SingIn() {
 
         <div className="flex justify-center items-center gap-2 mt-5">
           <p className="text-gray-600">Don't have an account?</p>
-          <Link to="/SignUp">
+          <Link to="/SingUp">
             <span className="text-indigo-600 font-medium hover:underline">Sign Up</span>
           </Link>
         </div>
